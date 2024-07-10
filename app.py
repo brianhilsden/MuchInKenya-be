@@ -1,25 +1,15 @@
 
-from flask import Flask,request,make_response
-from flask_migrate import Migrate 
-from flask_restful import Api, Resource 
+from config import Flask,request,make_response, app, api, Resource, db
 
-from models import db
+from models import Customer, Order, Driver, Restaurant, Food, Restaurant_Food
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://muchinkenya.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
-app.json.compact = False
 
-migrate = Migrate(app,db)
-db.init_app(app)
-
-api = Api(app)
 
 class Home(Resource):
     def get(self):
         return {"message":"Welcome to MuchInKenya"}
 
-app.add_resource(Home,'/')
+api.add_resource(Home,'/')
 
 class Foods(Resource):
     def get (self):
@@ -28,7 +18,7 @@ class Foods(Resource):
     def post (self):
         pass
 
-app.add_resource(Foods,'/foods')
+api.add_resource(Foods,'/foods')
 
 class Restaurant(Resource):
     def get (self):
@@ -37,7 +27,7 @@ class Restaurant(Resource):
     def post(self):
         pass
 
-app.add_resource(Restaurant,'/restaurant')
+api.add_resource(Restaurant,'/restaurant')
 
 class Drivers(Resource):
     def get (self):
@@ -46,13 +36,13 @@ class Drivers(Resource):
     def post(self):
         pass
 
-app.add_resource(Drivers, '/drivers')
+api.add_resource(Drivers, '/drivers')
 
 class Restaurant_food(Resource):
     def get (self):
         pass
 
-app.add_resource(Restaurant_food, '/restaurant_food')
+api.add_resource(Restaurant_food, '/restaurant_food')
 
 
 class Orders(Resource):
@@ -68,7 +58,7 @@ class Orders(Resource):
     def delete(self):
         pass
 
-app.add_resource(Orders, '/orders')
+api.add_resource(Orders, '/orders')
 
 class Customer(Resource):
     def get (self):
@@ -80,7 +70,7 @@ class Customer(Resource):
     def patch(self):
         pass
 
-app.add_resource(Customer, '/customers')
+api.add_resource(Customer, '/customers')
 
 class Reviews(Resource):
     def get (self):
@@ -92,7 +82,7 @@ class Reviews(Resource):
     def delete(self):
         pass
 
-app.add_resource(Reviews, '/reviews')
+api.add_resource(Reviews, '/reviews')
 
 
 
