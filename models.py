@@ -26,7 +26,7 @@ class Order(db.Model,SerializerMixin):
     driver = db.relationship("Driver",back_populates ="orders")
     food = db.relationship("Food", back_populates="orders")
 
-    serialize_rules = ("-customer.orders","-driver.orders","-food.orders")
+    serialize_rules = ("-customer","-driver","-food")
 
 class Driver(db.Model,SerializerMixin):
     __tablename__ = "drivers"
