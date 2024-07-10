@@ -1,9 +1,8 @@
 
-from flask import Flask,request,make_response
-from flask_migrate import Migrate 
-from flask_restful import Api, Resource 
+from config import Flask,request,make_response,Migrate, Api, Resource, db
 
-from models import db
+from models import Customer, Order, Driver, Restaurant, Food, Restaurant_Food
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://muchinkenya.db'
