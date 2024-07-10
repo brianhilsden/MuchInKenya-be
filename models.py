@@ -8,7 +8,7 @@ class Customer(db.Model,SerializerMixin):
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String)
     email = db.Column(db.String)
-    phone_number = db.Column(db.Integer)
+    phone_number = db.Column(db.String)
 
     orders = db.relationship("Order",back_populates="customer",cascade="all,delete-orphan")
 
@@ -28,7 +28,7 @@ class Driver(db.Model,SerializerMixin):
     __tablename__ = "drivers"
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String)
-    phone_number = db.Column(db.Integer)
+    phone_number = db.Column(db.String)
     orders = db.relationship("Order",back_populates="driver")
     serialize_rules = ("-orders.driver",)
 
@@ -54,7 +54,8 @@ class Restaurant_Food(db.Model,SerializerMixin):
     __tablename__ = "restaurant_foods"
     id = db.Column(db.Integer,primary_key=True)
     restaurant_id = db.Column(db.Integer,db.ForeignKey("restaurants.id"))
-    food_id = db.Column(db.Integer,db.ForeignKey("food.id"))
+    food_id = db.Column(db.Integer,db.ForeignKey("foods.id"))
     special_instructions = db.Column(db.String)
 
-
+    restaurant = db.relationship("Restaurant",back_populates="restaurant_foods")
+    food = db.relationship("Food",back_populates="restaurant_foods")
