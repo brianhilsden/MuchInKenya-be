@@ -1,7 +1,7 @@
 
 from config import Flask,request,make_response, app, api, Resource, db
 
-from models import Customer, Order, Driver, Restaurant, Food, Restaurant_Food
+from models import Customer, Order, Driver, Restaurant, Food, Restaurant_Food, Review
 
 
 
@@ -144,19 +144,45 @@ api.add_resource(Restaurant_foods, '/restaurant_food/<int:id>')
 
 
 class Orders(Resource):
-    def get (self):
-       pass
+    def get(self):
+        orders_list = []
+        for order in Order.query.all():
+            order_dict = {
+                "id": order.id,
+                "food_name": order.food.name if order.food else None,
+                "customer_name": order.customer.name if order.customer else None,
+                "driver_name": order.driver.name if order.driver else None
+            }
+            orders_list.append(order_dict)
+        return orders_list
 
     def post(self):
-        pass
+      if request.method == 'POST':
+           try:
+                orders = Order(
+                     food_id = request.get_json()["food_id"],
+                     customer_id = request.get_json()["customer_id"]
+                )
+                db.session.add(orders)
+                db.session.commit()
+                response = make_response(orders.to_dict(),201,{"content-type":"application/json"})
+                return response
+           except ValueError as e:
+                message={"errors":["validation errors"]}
+                response = make_response(message,400)
+                return response
 
-    def patch(self):
-        pass
+    def delete(self,order_id):
+        order = Order.query.get(order_id)
+        if not order:
+             return {"message":"Order not found"}, 404
+        
+        db.session.delete(order)
+        db.session.commit()
 
-    def delete(self):
-        pass
+        return {"message":f"Order {order_id} deleted successfully"}, 200
 
-api.add_resource(Orders, '/orders')
+api.add_resource(Orders, '/orders', '/orders/<int:order_id>')
 
 class Customers(Resource):
     def get (self):
@@ -200,15 +226,45 @@ api.add_resource(Customers, '/customers')
 
 class Reviews(Resource):
     def get (self):
-        pass
+         reviews_list = []
+         for review in Review.query.all():
+              review_dict = {
+                   "id":review.id,
+                   "message":review.message,
+                   "customer":review.customer.name if review.customer else None,
+                   "food":review.food.name if review.food else None
+                }
+              reviews_list.append(review_dict)
+         return reviews_list
 
     def post(self):
-        pass
+        if request.method == 'POST':
+             try:
+                  review = Review(
+                    message =  request.get_json()["message"],
+                    customer_id = request.get_json()["customer_id"],
+                    food_id = request.get_json()["food_id"]
+                  )
+                  db.session.add(review)
+                  db.session.commit()
+                  response = make_response(review.to_dict(),201,{"content-type":"application/json"})
+                  return response
+             except ValueError as e:
+                  message={"errors":["validation errors"]}
+                  response = make_response(message,400)
+                  return response
 
-    def delete(self):
-        pass
+    def delete(self,review_id):
+        review = Review.query.get(review_id)
+        if not review:
+             return {"message":"Order not found"}, 404
+        
+        db.session.delete(review)
+        db.session.commit()
 
-api.add_resource(Reviews, '/reviews')
+        return {"message":f"Review {review_id} deleted successfully"}
+
+api.add_resource(Reviews, '/reviews', '/reviews/<int:review_id>')
 
 
 
