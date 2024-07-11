@@ -1,6 +1,6 @@
 import os
 from flask_migrate import Migrate
-from flask import Flask
+from flask import Flask,session
 from sqlalchemy import MetaData
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api,Resource

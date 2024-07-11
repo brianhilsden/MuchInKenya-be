@@ -1,8 +1,8 @@
 
-from config import Flask,request,make_response, app, api, Resource, db
+from config import Flask,request,make_response, app, api, Resource, db,session
 
 from models import Customer, Order, Driver, Restaurant, Food, Restaurant_Food, Review
-
+from random import randint,choice as rc
 
 
 class Home(Resource):
@@ -20,6 +20,7 @@ class Foods(Resource):
                 'name': food.name,
                 'description': food.description,
                 'price': food.price,
+                'image':food.image
             }
             foods.append(food_dict)
             reponse = make_response(
@@ -55,6 +56,7 @@ class Restaurants(Resource):
                 'id': restaurant.id,
                 'name': restaurant.name,
                 'location': restaurant.location,
+                'image':restaurant.image
             }
             restaurants.append(restaurant_dict)
             reponse = make_response(
@@ -161,7 +163,8 @@ class Orders(Resource):
            try:
                 orders = Order(
                      food_id = request.get_json()["food_id"],
-                     customer_id = request.get_json()["customer_id"]
+                     customer_id = request.get_json()["customer_id"],
+                     driver_id = rc(Driver.query.all()).id
                 )
                 db.session.add(orders)
                 db.session.commit()
@@ -264,10 +267,97 @@ class Reviews(Resource):
 
         return {"message":f"Review {review_id} deleted successfully"}
 
-api.add_resource(Reviews, '/reviews', '/reviews/<int:review_id>')
+api.add_resource(Reviews, '/reviews','/reviews/<int:review_id>')
+
+class SignUp(Resource):
+     def post(self):
+        data = request.get_json()
+        name = data.get('name')
+        email = data.get('email')
+        phone_number = data.get('phone_number')
+        password = data.get('password')
+     
+
+        
+        try:
+            user = Customer(
+                name = name,
+                email = email,
+                phone_number = phone_number
+            )
+            user.password_hash = password
+
+            db.session.add(user)
+            db.session.commit()
+
+            session['user_id'] = user.id
+
+            return make_response(user.to_dict(), 201)
+
+        except Exception as e:
+
+            return {'error': e.args}, 422
+api.add_resource(SignUp, '/signup', endpoint='signup')
+
+class Login(Resource):
+    def post(self):
+        data = request.get_json()
+        user = Customer.query.filter_by(email=data.get('email')).first()
+        if user:
+            if user.authenticate(data.get('password')):
+                session["user_id"] = user.id
+                response = make_response(user.to_dict(),200)
+                return response
+        else:
+             return make_response({'error':"Unauthorized"},401)
+        
+api.add_resource(Login,'/login',endpoint="login")
+
+class Logout(Resource):
+     def delete(self):
+          if session["user_id"]:
+            session["user_id"] = None
+            return make_response({},204)
+          else:
+               return make_response({"error":"Unauthorized"},401)
+api.add_resource(Logout,"/logout",endpoint="logout")
+
+class CheckSession(Resource):
+    def get(self):
+        user = Customer.query.filter(Customer.id==session["user_id"]).first()
+        if user:
+            response = make_response(user.to_dict(),200)
+            return response
+        else:
+             return make_response({"error":"Unauthorized"},401)
+        
+api.add_resource(CheckSession,'/check_session',endpoint="check_session")
+        
+class RestaurantMenu(Resource):
+     def get(self,id):
+          restaurant = Restaurant.query.filter(Restaurant.id == id).first()
+          response = make_response([food.to_dict(rules=("-orders","-restaurant_foods","-reviews")) for food in restaurant.foods],200)
+          return response
+     
+api.add_resource(RestaurantMenu,'/restaurant_menu/<int:id>',endpoint="restaurant_menu/id")
 
 
 
+class Food_by_Id(Resource):
+    def get (self,id):
+        food = Food.query.filter(Food.id == id).first()
+        response = make_response(food.to_dict(rules=("-orders","-restaurant_foods","-reviews.customer")),200)
+        return response
+    
+api.add_resource(Food_by_Id,'/food_by_id/<int:id>',endpoint='food_by_id')
+
+class Past_orders_by_id(Resource):
+     def get(self,id):
+          user = Customer.query.filter(Customer.id == id).first()
+          response = make_response([order.to_dict() for order in user.orders],200)
+          return response
+     
+api.add_resource(Past_orders_by_id,'/past_orders/<int:id>',endpoint="past_orders")
 
 if __name__ == '__main__':
     app.run(port=5555,debug=True)
