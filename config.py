@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv()
 import os
 from flask_migrate import Migrate
 from flask import Flask,session
