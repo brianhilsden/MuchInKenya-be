@@ -4,6 +4,24 @@ from config import Flask,request,make_response, app, api, Resource, db,session
 from models import Customer, Order, Driver, Restaurant, Food, Restaurant_Food, Review
 from random import randint,choice as rc
 
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity,current_user
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
+
+app.config["JWT_SECRET_KEY"] = "b'Y\xf1Xz\x01\xad|eQ\x80t \xca\x1a\x10K'"  
+app.config['JWT_TOKEN_LOCATION'] = ['headers']
+jwt = JWTManager(app)
+
+@jwt.user_identity_loader
+def user_identity_lookup(user):
+    return user.id
+
+@jwt.user_lookup_loader
+def user_lookup_callback(_jwt_header, jwt_data):
+    identity = jwt_data["sub"]
+    return Customer.query.filter_by(id=identity).one_or_none()
+
 
 class Home(Resource):
     def get(self):
@@ -189,6 +207,7 @@ api.add_resource(Orders, '/orders', '/orders/<int:order_id>')
 
 class Customers(Resource):
     def get (self):
+        
         customers = []
         for customer in Customer.query.all():
             customer_dict ={
@@ -276,27 +295,31 @@ class SignUp(Resource):
         email = data.get('email')
         phone_number = data.get('phone_number')
         password = data.get('password')
-     
 
+        user = Customer.query.filter_by(email=email).first()
+      
+        if not user:
+            try:
+                user = Customer(
+                    name = name,
+                    email = email,
+                    phone_number = phone_number
+                )
+                user.password_hash = password
+
+                db.session.add(user)
+                db.session.commit()
+
+                access_token = create_access_token(identity=user)
+
+                return make_response({"user":user.to_dict(),'access_token': access_token},201)
+
+            except Exception as e:
+
+                return {'error': e.args}, 422
+        else:
+             return make_response({'error':"Email already registered, kindly log in"},401)
         
-        try:
-            user = Customer(
-                name = name,
-                email = email,
-                phone_number = phone_number
-            )
-            user.password_hash = password
-
-            db.session.add(user)
-            db.session.commit()
-
-            session['user_id'] = user.id
-
-            return make_response(user.to_dict(), 201)
-
-        except Exception as e:
-
-            return {'error': e.args}, 422
 api.add_resource(SignUp, '/signup', endpoint='signup')
 
 class Login(Resource):
@@ -305,33 +328,24 @@ class Login(Resource):
         user = Customer.query.filter_by(email=data.get('email')).first()
         if user:
             if user.authenticate(data.get('password')):
-                session["user_id"] = user.id
-                response = make_response(user.to_dict(),200)
+                access_token = create_access_token(identity=user)
+                response = make_response({"user":user.to_dict(),'access_token': access_token},201)
                 return response
+            else:
+                 return make_response({'error':"Incorrect password"},401)
         else:
              return make_response({'error':"Unauthorized"},401)
         
 api.add_resource(Login,'/login',endpoint="login")
 
-class Logout(Resource):
-     def delete(self):
-          if session["user_id"]:
-            session["user_id"] = None
-            return make_response({},204)
-          else:
-               return make_response({"error":"Unauthorized"},401)
-api.add_resource(Logout,"/logout",endpoint="logout")
 
 class CheckSession(Resource):
-    def get(self):
-        user = Customer.query.filter(Customer.id==session["user_id"]).first()
-        if user:
-            response = make_response(user.to_dict(),200)
-            return response
-        else:
-             return make_response({"error":"Unauthorized"},401)
-        
+     @jwt_required()
+     def get(self):
+        # We can now access our sqlalchemy User object via `current_user`.
+        return make_response(current_user.to_dict(),200)
 api.add_resource(CheckSession,'/check_session',endpoint="check_session")
+
         
 class RestaurantMenu(Resource):
      def get(self,id):
@@ -354,7 +368,11 @@ api.add_resource(Food_by_Id,'/food_by_id/<int:id>',endpoint='food_by_id')
 class Past_orders_by_id(Resource):
      def get(self,id):
           user = Customer.query.filter(Customer.id == id).first()
-          response = make_response([order.to_dict() for order in user.orders],200)
+          response = make_response([{
+               "id":order.id,
+              "food_name": order.food.name if order.food else None,
+              "driver_name": order.driver.name if order.driver else None
+          } for order in sorted(user.orders, key=lambda x: x.id, reverse=True)], 200)
           return response
      
 api.add_resource(Past_orders_by_id,'/past_orders/<int:id>',endpoint="past_orders")
