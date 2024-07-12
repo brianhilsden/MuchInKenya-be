@@ -7,10 +7,12 @@ from flask_restful import Api,Resource
 from flask import request, session,make_response
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
+import os
 
 app = Flask(__name__)
 app.secret_key = b'Y\xf1Xz\x00\xad|eQ\x80t \xca\x1a\x10K'
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///munchinkenya.db"
+""" app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///munchinkenya.db" """
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 db = SQLAlchemy()
