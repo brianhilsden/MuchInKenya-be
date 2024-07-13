@@ -122,3 +122,23 @@ class Review(db.Model,SerializerMixin):
 
     def __repr__(self):
         return f'<Review id={self.id} message={self.message}>'
+    
+class Feedback(db.Model,SerializerMixin):
+    __tablename__ = "feedbacks"
+    id = db.Column(db.Integer,primary_key = True)
+    name = db.Column(db.String)
+    email = db.Column(db.String)
+    feedback = db.Column(db.String)
+
+    def __repr__(self):
+        return f'Feedback id = {self.id} feedback={self.feedback}'
+    
+class Contact(db.Model,SerializerMixin):
+    __tablename__ = "contacts"
+    id = db.Column(db.Integer,primary_key = True)
+    name = db.Column(db.String)
+    email = db.Column(db.String)
+    message = db.Column(db.String)
+
+    def __repr__(self):
+        return f'ContactUs id = {self.id} feedback={self.message}'
