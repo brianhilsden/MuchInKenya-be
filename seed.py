@@ -24,10 +24,10 @@ def seed_data():
 
         # Add Drivers
         drivers = [
-            Driver(name="Driver Wafula", phone_number="254755512345"),
-            Driver(name="Driver Otieno", phone_number="254755543210"),
-            Driver(name="Driver Wanjiku", phone_number="254755598765"),
-            Driver(name="Driver Kimani", phone_number="254755532198")
+            Driver(name="John Wafula", phone_number="254755512345"),
+            Driver(name="Daniel Otieno", phone_number="254755543210"),
+            Driver(name="Ashley Wanjiku", phone_number="254755598765"),
+            Driver(name="Maria Kimani", phone_number="254755532198")
         ]
         db.session.add_all(drivers)
 
@@ -38,11 +38,19 @@ def seed_data():
             Restaurant(name="Java House", location="789 Ngong Rd", image="https://tb-static.uber.com/prod/image-proc/processed_images/1d684549f9a49547d4e1315d478ee88b/fb86662148be855d931b37d6c1e5fcbe.jpeg"),
             Restaurant(name="Carnivore Restaurant", location="101 Lang'ata Rd", image="https://tb-static.uber.com/prod/image-proc/processed_images/4944a9f56d74809000780f09ad45e5ea/fb86662148be855d931b37d6c1e5fcbe.jpeg"),
             Restaurant(name="K'osewe Ranalo Foods", location="102 Koinange St", image="https://tb-static.uber.com/prod/image-proc/processed_images/e050bdd8b2c4d3ae7922b49717112bb8/fb86662148be855d931b37d6c1e5fcbe.jpeg"),
-            Restaurant(name="Artcaffe", location="103 Westlands Rd", image="https://tb-static.uber.com/prod/image-proc/processed_images/49828416c0957876f48f9cc25ae9547c/30be7d11a3ed6f6183354d1933fbb6c7.jpeg")
+            Restaurant(name="Artcaffe", location="103 Westlands Rd", image="https://tb-static.uber.com/prod/image-proc/processed_images/49828416c0957876f48f9cc25ae9547c/30be7d11a3ed6f6183354d1933fbb6c7.jpeg"),
+            
+            Restaurant(name="Tamasha", location="104 Kimathi St", image="https://d2jz91etbhmz77.cloudfront.net/uploads/p1600249_custom-0e784641cf2670e12b3250aa6c03254c74d10d4e.jpg"),
+            Restaurant(name="K'Osewe Ranalo City", location="105 Biashara St", image="https://thestillery.co.uk/wp-content/uploads/2023/03/food-review-Mbuzi-choma-kenyan-barbeque-best-kenya-meat-fest-2023-nairobi.jpg"),
+            Restaurant(name="Sierra", location="106 Yaya Center", image="https://sierrarestaurant.co.ke/wp-content/uploads/2019/11/JLC0275-e1499882038994.jpg"), 
+            Restaurant(name="Talisman", location="107 Karen Rd", image="https://newplaceholderimage.com/restaurant3.jpg"),
+            Restaurant(name="Hoja Moska", location="108 Railway Lane", image="https://newplaceholderimage.com/restaurant1.jpg"),
+            Restaurant(name="Choma Grill", location="109 Mombasa Rd", image="https://newplaceholderimage.com/restaurant2.jpg"),
         ]
+
         db.session.add_all(restaurants)
 
-        # Add Foods
+        
         foods = [
             Food(name="Nyama Choma", description="Grilled meat", price=1200, image="https://lowcarbafrica.com/wp-content/uploads/2022/10/Nyama-Choma-Kenyan-Grilled-Goat-Meat-1.webp"),
             Food(name="Ugali and Fish", description="Traditional Kenyan dish", price=800, image="https://theroamingfork.com/wp-content/uploads/2023/01/Mama-Oliech-Z-special-740x493.jpg?ezimgfmt=ngcb1/notWebP"),
@@ -69,9 +77,41 @@ def seed_data():
             Food(name="Paneer Butter Masala", description="Paneer in a rich tomato sauce", price=1200, image="https://www.secondrecipe.com/wp-content/uploads/2021/08/roti-paneer-butter-masala-720x873.jpg"),
             Food(name="Veggie Wrap", description="Vegetable-filled wrap", price=600, image="https://tastesbetterfromscratch.com/wp-content/uploads/2014/04/Veggie-Wrap-2.jpg"),
             Food(name="Fruit Salad", description="Mixed fruit salad", price=350, image="https://cdn.loveandlemons.com/wp-content/uploads/2020/06/fruit-salad-recipe-580x791.jpg"),
-            Food(name="Pasta Alfredo", description="Creamy pasta with mushrooms", price=1100, image="https://www.modernhoney.com/wp-content/uploads/2018/08/Fettuccine-Alfredo-Recipe-1-1200x1182.jpg")
-        ]
+            Food(name="Pasta Alfredo", description="Creamy pasta with mushrooms", price=1100, image="https://www.modernhoney.com/wp-content/uploads/2018/08/Fettuccine-Alfredo-Recipe-1-1200x1182.jpg"),
+            
+            
+            Food(name="Pizza Margherita", description="Classic pizza with tomatoes and mozzarella", price=1200, image="https://images.unsplash.com/photo-1568605114967-8130f3a36994"),
+            Food(name="Tacos", description="Mexican tacos with beef and salsa", price=900, image="https://images.unsplash.com/photo-1601925321480-0666edb02fe6"),
+            Food(name="Caesar Salad", description="Fresh caesar salad with croutons", price=800, image="https://images.unsplash.com/photo-1565895405227-bd07d0204fea"),
+            Food(name="BBQ Ribs", description="Juicy BBQ pork ribs", price=1600, image="https://images.unsplash.com/photo-1550547660-d9450f859349"),
+            Food(name="Chocolate Cake", description="Rich chocolate cake with layers", price=710, image="https://images.unsplash.com/photo-1600891964599-f61ba0e24092"),
+
+            Food(name="Vanilla Ice Cream", description="Creamy vanilla ice cream", price=300, image="https://images.unsplash.com/photo-1488477184167-1a55918962a3"),
+            Food(name="Strawberry Tart", description="Fresh strawberry tart", price=500, image="https://images.unsplash.com/photo-1562967916-eb82221dfb22"),
+            Food(name="Mango Sorbet", description="Tangy mango sorbet", price=200, image="https://images.unsplash.com/photo-1568474756207-25d6921836b6"),
+            Food(name="Carrot Cake", description="Spiced carrot cake with cream cheese frosting", price=750, image="https://images.unsplash.com/photo-1573101441517-1e86a521f21b"),
+            Food(name="Apple Pie", description="Classic apple pie", price=600, image="https://images.unsplash.com/photo-1532634896-26909d0d4b94"),
+            Food(name="Pecan Pie", description="Rich pecan pie", price=900, image="https://images.unsplash.com/photo-1558005857-cbb87f86f63a"),
+            Food(name="Chocolate Chip Cookies", description="Chewy chocolate chip cookies", price=150, image="https://images.unsplash.com/photo-1589884115217-c73e5c69f873"),
+            Food(name="Brownies", description="Fudgy chocolate brownies", price=400, image="https://images.unsplash.com/photo-1548369595946-75555c878f33"),
+            Food(name="Tiramisu", description="Classic Italian tiramisu", price=800, image="https://images.unsplash.com/photo-1612884761948-9e75e29e3a1c"),
+            Food(name="Raspberry Cheesecake", description="Creamy raspberry cheesecake", price=900, image="https://images.unsplash.com/photo-1543353071-087092ec393a"),
+
+        
+            Food(name="BBQ Chicken Wings", description="Grilled chicken wings with BBQ sauce", price=900, image="https://images.unsplash.com/photo-1586190848861-99aa4a171e90"),
+            Food(name="Fish and Chips", description="Fried fish with crispy fries", price=700, image="https://images.unsplash.com/photo-1562967916-eb82221dfb22"),
+            Food(name="Shrimp Cocktail", description="Chilled shrimp with cocktail sauce", price=1200, image="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4"),
+            Food(name="Falafel", description="Deep-fried chickpea balls", price=400, image="https://images.unsplash.com/photo-1504909038004-bd56e6b67f6b"),
+            Food(name="Greek Salad", description="Salad with feta cheese and olives", price=500, image="https://images.unsplash.com/photo-1568605114967-8130f3a36994"),
+            Food(name="Beef Tacos", description="Mexican tacos with beef filling", price=700, image="https://images.unsplash.com/photo-1601925321480-0666edb02fe6"),
+            Food(name="Garlic Bread", description="Bread with garlic butter", price=200, image="https://images.unsplash.com/photo-1617196033508-58be8b5e371b"),
+            Food(name="Butter Chicken", description="Creamy Indian chicken curry", price=1100, image="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38"),
+            Food(name="Chicken Kebab", description="Skewered grilled chicken", price=800, image="https://images.unsplash.com/photo-1554284126-aa88f22d267c"),
+            Food(name="Eggplant Parmesan", description="Baked eggplant with cheese", price=900, image="https://images.unsplash.com/photo-1565895405227-bd07d0204fea")
+]
+
         db.session.add_all(foods)
+        
 
         # Add Restaurant_Foods relationships
         restaurant_foods = [
@@ -87,19 +127,45 @@ def seed_data():
             Restaurant_Food(restaurant=restaurants[4], food=foods[9]),
             Restaurant_Food(restaurant=restaurants[5], food=foods[10]),
             Restaurant_Food(restaurant=restaurants[5], food=foods[11]),
-            Restaurant_Food(restaurant=restaurants[1], food=foods[12]),
-            Restaurant_Food(restaurant=restaurants[1], food=foods[13]),
-            Restaurant_Food(restaurant=restaurants[2], food=foods[14]),
-            Restaurant_Food(restaurant=restaurants[2], food=foods[15]),
-            Restaurant_Food(restaurant=restaurants[3], food=foods[16]),
-            Restaurant_Food(restaurant=restaurants[3], food=foods[17]),
-            Restaurant_Food(restaurant=restaurants[4], food=foods[18]),
-            Restaurant_Food(restaurant=restaurants[4], food=foods[19]),
-            Restaurant_Food(restaurant=restaurants[5], food=foods[20]),
-            Restaurant_Food(restaurant=restaurants[5], food=foods[21]),
-            Restaurant_Food(restaurant=restaurants[0], food=foods[22]),
-            Restaurant_Food(restaurant=restaurants[0], food=foods[23]),
-            Restaurant_Food(restaurant=restaurants[0], food=foods[24])
+            Restaurant_Food(restaurant=restaurants[6], food=foods[12]),
+            Restaurant_Food(restaurant=restaurants[6], food=foods[13]),
+            Restaurant_Food(restaurant=restaurants[7], food=foods[14]),
+            Restaurant_Food(restaurant=restaurants[7], food=foods[15]),
+            Restaurant_Food(restaurant=restaurants[8], food=foods[16]),
+            Restaurant_Food(restaurant=restaurants[8], food=foods[17]),
+            Restaurant_Food(restaurant=restaurants[9], food=foods[18]),
+            Restaurant_Food(restaurant=restaurants[9], food=foods[19]),
+            Restaurant_Food(restaurant=restaurants[10], food=foods[20]),
+            Restaurant_Food(restaurant=restaurants[10], food=foods[21]),
+            Restaurant_Food(restaurant=restaurants[11], food=foods[22]),
+            Restaurant_Food(restaurant=restaurants[11], food=foods[23]),
+            Restaurant_Food(restaurant=restaurants[11], food=foods[24]),
+            Restaurant_Food(restaurant=restaurants[0], food=foods[25]),
+            Restaurant_Food(restaurant=restaurants[0], food=foods[26]),
+            Restaurant_Food(restaurant=restaurants[1], food=foods[27]),
+            Restaurant_Food(restaurant=restaurants[1], food=foods[28]),
+            Restaurant_Food(restaurant=restaurants[2], food=foods[29]),
+            Restaurant_Food(restaurant=restaurants[2], food=foods[30]),
+            Restaurant_Food(restaurant=restaurants[3], food=foods[31]),
+            Restaurant_Food(restaurant=restaurants[3], food=foods[32]),
+            Restaurant_Food(restaurant=restaurants[4], food=foods[33]),
+            Restaurant_Food(restaurant=restaurants[4], food=foods[34]),
+            Restaurant_Food(restaurant=restaurants[5], food=foods[35]),
+            Restaurant_Food(restaurant=restaurants[5], food=foods[36]),
+            Restaurant_Food(restaurant=restaurants[6], food=foods[37]),
+            Restaurant_Food(restaurant=restaurants[6], food=foods[38]),
+            Restaurant_Food(restaurant=restaurants[7], food=foods[39]),
+            Restaurant_Food(restaurant=restaurants[7], food=foods[40]),
+            Restaurant_Food(restaurant=restaurants[8], food=foods[41]),
+            Restaurant_Food(restaurant=restaurants[8], food=foods[42]),
+            Restaurant_Food(restaurant=restaurants[9], food=foods[43]),
+            Restaurant_Food(restaurant=restaurants[9], food=foods[44]),
+            Restaurant_Food(restaurant=restaurants[10], food=foods[45]),
+            Restaurant_Food(restaurant=restaurants[10], food=foods[46]),
+            Restaurant_Food(restaurant=restaurants[11], food=foods[47]),
+            Restaurant_Food(restaurant=restaurants[11], food=foods[48]),
+            Restaurant_Food(restaurant=restaurants[11], food=foods[49]),
+            Restaurant_Food(restaurant=restaurants[0], food=foods[50])
         ]
         db.session.add_all(restaurant_foods)
 
