@@ -419,9 +419,26 @@ class ContactUs(Resource):
 
 api.add_resource(ContactUs,'/contact',endpoint="contact")
 
+class UserByEmail(Resource):
+    def post(self):
+        data = request.get_json()
+        email = data.get('email')
+        user = Customer.query.filter_by(email=email).first()
+        if user:
+            access_token = create_access_token(identity=user)
+            response = make_response({"user":user.to_dict(),'access_token': access_token},201)
+        else:
+            response = make_response({"message": "User not found"}, 404)
+        return response
+api.add_resource(UserByEmail,'/userByEmail',endpoint="userByEmail")
 
-
-
+class ReviewById(Resource):
+     def get(self,id):
+          food = Food.query.filter(id == id).first()
+          response = make_response([{"name":review.customer.name,"message":review.message} for review in food.reviews],200)
+          return response
+     
+api.add_resource(ReviewById,'/reviewById/<int:id>',endpoint="reviewById")
 
 if __name__ == '__main__':
     app.run(port=5555,debug=True)
