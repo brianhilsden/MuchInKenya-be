@@ -1,7 +1,7 @@
 
 from config import Flask,request,make_response, app, api, Resource, db,session
 
-from models import Customer, Order, Driver, Restaurant, Food, Restaurant_Food, Review
+from models import Customer, Order, Driver, Restaurant, Food, Restaurant_Food, Review,Feedback,Contact
 from random import randint,choice as rc
 
 from flask_jwt_extended import create_access_token
@@ -376,6 +376,69 @@ class Past_orders_by_id(Resource):
           return response
      
 api.add_resource(Past_orders_by_id,'/past_orders/<int:id>',endpoint="past_orders")
+
+class Feedbacks(Resource):
+    def post(self):
+        data = request.get_json()
+          
+        try:
+            feedback = Feedback(
+                name = data.get('name'),
+                email = data.get('email'),
+                feedback = data.get('feedback'))
+            
+            db.session.add(feedback)
+            db.session.commit()
+            response = make_response(feedback.to_dict(),201,{"content-type":"application/json"})
+            return response
+        except ValueError as e:
+            message={"errors":["validation errors"]}
+            response = make_response(message,400)
+            return response
+
+api.add_resource(Feedbacks,'/feedback',endpoint="feedbacks")
+
+class ContactUs(Resource):
+    def post(self):
+        data = request.get_json()
+          
+        try:
+            contact = Contact(
+                name = data.get('name'),
+                email = data.get('email'),
+                message = data.get('message'))
+            
+            db.session.add(contact)
+            db.session.commit()
+            response = make_response(contact.to_dict(),201,{"content-type":"application/json"})
+            return response
+        except ValueError as e:
+            message={"errors":["validation errors"]}
+            response = make_response(message,400)
+            return response
+
+api.add_resource(ContactUs,'/contact',endpoint="contact")
+
+class UserByEmail(Resource):
+    def post(self):
+        data = request.get_json()
+        email = data.get('email')
+        user = Customer.query.filter_by(email=email).first()
+        if user:
+            access_token = create_access_token(identity=user)
+            response = make_response({"user":user.to_dict(),'access_token': access_token},201)
+        else:
+            response = make_response({"message": "User not found"}, 404)
+        return response
+api.add_resource(UserByEmail,'/userByEmail',endpoint="userByEmail")
+
+class ReviewById(Resource):
+     def get(self,id):
+          food = Food.query.filter(id == id).first()
+          response = make_response([{"name":review.customer.name,"message":review.message} for review in food.reviews],200)
+          return response
+     
+api.add_resource(ReviewById,'/reviewById/<int:id>',endpoint="reviewById")
 
 if __name__ == '__main__':
     app.run(port=5555,debug=True)
