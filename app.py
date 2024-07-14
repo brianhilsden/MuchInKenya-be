@@ -371,7 +371,8 @@ class Past_orders_by_id(Resource):
           response = make_response([{
                "id":order.id,
               "food_name": order.food.name if order.food else None,
-              "driver_name": order.driver.name if order.driver else None
+              "driver_name": order.driver.name if order.driver else None,
+              "food_id":order.food_id if order.food_id else None,
           } for order in sorted(user.orders, key=lambda x: x.id, reverse=True)], 200)
           return response
      
