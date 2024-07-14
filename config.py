@@ -20,7 +20,8 @@ db = SQLAlchemy()
 migrate = Migrate(app, db)
 db.init_app(app)
 
+
 bcrypt = Bcrypt(app)
 
 api = Api(app)
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+CORS(app, resources={r"/*": {"origins": "https://muchinkenya-be.onrender.com"}})
