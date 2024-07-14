@@ -43,7 +43,7 @@ class Order(db.Model,SerializerMixin):
     food = db.relationship("Food", back_populates="orders")
 
    
-    serialize_only=("driver.name","food.name","food.image","food.price")
+    serialize_only=("driver.name","food.name","food.image","food.price","food_id")
 
     def __repr__(self):
         return f'<Order id={self.id} customer_id={self.customer_id} driver_id={self.driver_id} food_id={self.food_id}>'
