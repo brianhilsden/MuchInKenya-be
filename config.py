@@ -24,4 +24,4 @@ db.init_app(app)
 bcrypt = Bcrypt(app)
 
 api = Api(app)
-CORS(app, resources={r"/*": {"origins": "https://muchinkenya-be.onrender.com"}})
+CORS(app, resources={r"/*": {"origins": ["http://localhost:3000","https://brianhilsden.github.io/MunchInKenya-fe"]}})
