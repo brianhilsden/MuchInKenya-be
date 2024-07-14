@@ -22,5 +22,6 @@ db.init_app(app)
 
 bcrypt = Bcrypt(app)
 
+
 api = Api(app)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
