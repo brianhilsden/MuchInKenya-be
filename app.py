@@ -196,7 +196,7 @@ class Orders(Resource):
     def delete(self,order_id):
         order = Order.query.get(order_id)
         if not order:
-             return {"error message":"Order not found"}, 404
+             return {"message":"Order not found"}, 404
         
         db.session.delete(order)
         db.session.commit()
