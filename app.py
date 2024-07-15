@@ -25,7 +25,7 @@ def user_lookup_callback(_jwt_header, jwt_data):
 
 class Home(Resource):
     def get(self):
-        return {"message":"Welcome to MuchInKenya"}
+        return {"welcome message":"Welcome to MuchInKenya"}
 
 api.add_resource(Home,'/')
 
@@ -196,7 +196,7 @@ class Orders(Resource):
     def delete(self,order_id):
         order = Order.query.get(order_id)
         if not order:
-             return {"message":"Order not found"}, 404
+             return {"error message":"Order not found"}, 404
         
         db.session.delete(order)
         db.session.commit()
