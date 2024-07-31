@@ -441,6 +441,29 @@ class ReviewById(Resource):
      
 api.add_resource(ReviewById,'/reviewById/<int:id>',endpoint="reviewById")
 
+class CustomerById(Resource):
+    def get(self, id):
+        customer = Customer.query.filter(Customer.id == id).first()
+        if customer:
+            response = make_response(customer.to_dict(), 200)
+        else:
+            response = make_response({"message": "Customer not found"}, 404)
+        return response
+
+api.add_resource(CustomerById, '/customer/<int:id>', endpoint="customer_id")
+
+class FeedbackById(Resource):
+    def get(self, id):
+        feedback = Feedback.query.filter(Feedback.id == id).first()
+        if feedback:
+            response = make_response(feedback.to_dict(), 200)
+        else:
+            response = make_response({"message": "Feedback not found"}, 404)
+        return response
+
+api.add_resource(FeedbackById, '/feedback_by_id/<int:id>', endpoint="feedback_by_id")
+
+
 if __name__ == '__main__':
     app.run(port=5555,debug=True)
 
