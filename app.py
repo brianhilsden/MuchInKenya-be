@@ -327,9 +327,9 @@ class Login(Resource):
         data = request.get_json()
         user = Customer.query.filter_by(email=data.get('email')).first()
         if user:
-            if user.authenticate(data.get('password')):
+            if user.verify_password(data.get("password")):
                 access_token = create_access_token(identity=user)
-                response = make_response({"user":user.to_dict(),'access_token': access_token},201)
+                response = make_response({"user":user.to_dict(),"access_token":access_token},201)
                 return response
             else:
                  return make_response({'error':"Incorrect password"},401)

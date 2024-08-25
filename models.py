@@ -10,7 +10,7 @@ class Customer(db.Model,SerializerMixin):
     email = db.Column(db.String)
     phone_number = db.Column(db.String)
     _password_hash = db.Column(db.String)
-
+    
     @hybrid_property
     def password_hash(self):
         raise Exception('Password hashes may not be viewed.')
@@ -26,7 +26,7 @@ class Customer(db.Model,SerializerMixin):
     orders = db.relationship("Order",back_populates="customer",cascade="all,delete-orphan")
     reviews = db.relationship("Review",back_populates="customer",cascade="all,delete-orphan")
 
-    serialize_rules = ("-orders.customer","-orders.driver","-orders","-reviews","-_password_hash")
+    serialize_rules = ("-orders.customer",  "-orders.driver","-orders","-reviews","-_password_hash")
 
     def __repr__(self):
         return f'<Customer id={self.id} name={self.name} email={self.email}>'
@@ -46,7 +46,7 @@ class Order(db.Model,SerializerMixin):
     serialize_only=("driver.name","food.name","food.image","food.price","food_id")
 
     def __repr__(self):
-        return f'<Order id={self.id} customer_id={self.customer_id} driver_id={self.driver_id} food_id={self.food_id}>'
+        return f'<Order id={self.id}    customer_id={self.customer_id} driver_id={self.driver_id} food_id={self.food_id}>'
 
 class Driver(db.Model,SerializerMixin):
     __tablename__ = "drivers"
