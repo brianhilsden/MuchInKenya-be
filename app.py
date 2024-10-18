@@ -66,6 +66,8 @@ class Foods(Resource):
 
 api.add_resource(Foods,'/foods')
 
+
+
 class Restaurants(Resource):
     def get (self):
         restaurants = []
